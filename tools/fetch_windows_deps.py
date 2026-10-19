@@ -7,7 +7,7 @@ dest.mkdir(parents=True,exist_ok=True)
 assets=json.loads((root/'packaging/windows/dependencies.json').read_text())
 def fetch(a):
  p=root/'.deps/downloads'/a['name']
- data=p.read_bytes() if p.exists() else urllib.request.urlopen(a['url'],timeout=120).read()
+ data=(root/a['local_path']).read_bytes() if 'local_path' in a else (p.read_bytes() if p.exists() else urllib.request.urlopen(a['url'],timeout=120).read())
  digest=hashlib.sha256(data).hexdigest()
  if a['sha256'] and digest!=a['sha256']:raise RuntimeError('Checksum mismatch '+a['name'])
  a['sha256']=digest;p.write_bytes(data);print(a['name'],len(data),flush=True)

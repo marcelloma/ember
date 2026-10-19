@@ -39,7 +39,8 @@
         {
           "type": "archive",
           "url": "https://codeload.github.com/libsdl-org/SDL/tar.gz/refs/tags/release-3.4.18",
-          "sha256": "c4b08b950bd29d83caae0ab8d884298d27046a9d30700fb42841c50992665c90"
+          "sha256": "c4b08b950bd29d83caae0ab8d884298d27046a9d30700fb42841c50992665c90",
+          "archive-type": "tar-gzip"
         }
       ]
     },
@@ -61,7 +62,8 @@
         {
           "type": "archive",
           "url": "https://codeload.github.com/libsdl-org/SDL_ttf/tar.gz/refs/tags/release-3.2.2",
-          "sha256": "ff6b81d3dc39d843cc3ead6dedd68043a79513d266792ea89445547ef4e9b073"
+          "sha256": "ff6b81d3dc39d843cc3ead6dedd68043a79513d266792ea89445547ef4e9b073",
+          "archive-type": "tar-gzip"
         }
       ]
     },
@@ -86,7 +88,8 @@
         {
           "type": "archive",
           "url": "https://codeload.github.com/libsdl-org/SDL_image/tar.gz/refs/tags/release-3.4.8",
-          "sha256": "a3cdbe4bee5dc6251bea15c379bde2bc87bc1eb78a6d68784852f51732d41c24"
+          "sha256": "a3cdbe4bee5dc6251bea15c379bde2bc87bc1eb78a6d68784852f51732d41c24",
+          "archive-type": "tar-gzip"
         }
       ]
     },
@@ -100,7 +103,7 @@
         }
       },
       "build-commands": [
-        "zig build -Doptimize=ReleaseSafe --prefix /app/lib/ember-install",
+        "zig build -Dtarget=x86_64-linux-gnu -Dcpu=baseline -Doptimize=ReleaseSafe --prefix /app/lib/ember-install",
         "SDL_VIDEODRIVER=dummy SDL_AUDIODRIVER=dummy zig build test -Doptimize=ReleaseSafe",
         "mv /app/lib/ember-install/bin /app/lib/ember",
         "rmdir /app/lib/ember-install",

@@ -79,6 +79,8 @@ python3 tools/fetch_windows_deps.py
 
 Downloads come from official SDL GitHub releases and the libretro build server.
 SHA-256 checksums and URLs are locked in `packaging/windows/dependencies.json`.
+The verified Windows core archive is retained in `packaging/windows/` because
+the upstream nightly URL changes; its recorded URL documents its origin.
 The SDK is extracted into Git-ignored `.deps/windows-x86_64`, with cached archives
 under `.deps/downloads`. No system packages or global toolchains are installed.
 The build itself performs no downloads. Override the SDK path with

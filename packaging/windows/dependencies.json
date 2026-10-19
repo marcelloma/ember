@@ -39,6 +39,7 @@
     "name": "snes9x_libretro.dll.zip",
     "url": "https://buildbot.libretro.com/nightly/windows/x86_64/latest/snes9x_libretro.dll.zip",
     "sha256": "bb5f135e2a2071e69df4f3786a17fbf59a94bad8ade75caa4039c1e6c1222fad",
-    "component": "snes9x"
+    "component": "snes9x",
+    "local_path": "packaging/windows/snes9x_libretro.dll.zip"
   }
 ]
