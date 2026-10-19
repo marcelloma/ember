@@ -9,13 +9,41 @@ GitHub Actions builds every push to `main` and updates the rolling
 both Linux and Windows packages pass. Pull requests run the same build checks
 without publishing. The workflow also supports manual runs on `main`.
 
-Release downloads include a Linux tar.gz, Windows zip, and archive SHA-256
-checksums. ROMs are excluded. Linux CI builds on Ubuntu 24.04 (glibc 2.39),
-bundles the three SDL shared libraries, and uses system FreeType, HarfBuzz,
-PNG, audio and desktop libraries. Windows bundles its SDL DLLs and core.
-The Linux job runs unit tests and a headless library render; Windows binaries
+Release downloads include a Linux Flatpak, Windows zip, and SHA-256
+checksums. ROMs are excluded. Linux CI compiles inside the Freedesktop 25.08 SDK,
+bundles SDL and the emulator core, and uses the matching Flatpak runtime.
+Windows bundles its SDL DLLs and core.
+The Linux job runs unit tests and a headless render of the installed Flatpak; Windows binaries
 receive PE/resource/DLL checks and still need runtime testing on Windows.
 ROM-dependent integration tests remain local.
+
+### Install the Linux Flatpak
+
+Download `Ember-linux-x86_64.flatpak` from the latest release, then:
+
+```sh
+flatpak install --user ./Ember-linux-x86_64.flatpak
+flatpak run org.ember.Launcher
+```
+
+Flatpak installs the required Freedesktop runtime from Flathub. The app appears
+in the desktop application menu with the flame icon. Copy your SNES files into
+`~/.var/app/org.ember.Launcher/data/Ember/roms/snes/`, using the filenames in
+`library/snes.json`. The app creates this folder on first launch. Saves and
+settings also stay in its private Flatpak data directory; existing non-Flatpak
+saves are not migrated automatically. No host home-directory or network access
+is granted. For an external ROM directory, grant that specific folder with
+`flatpak override --user --filesystem=/absolute/path:ro --env=EMBER_ROM_DIR=/absolute/path org.ember.Launcher`.
+The selected folder must contain `snes/`. This override also works for native
+builds via the `EMBER_ROM_DIR` environment variable.
+
+To build the Flatpak locally with `flatpak-builder` installed:
+
+```sh
+flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+flatpak-builder --user --install-deps-from=flathub --assumeyes --force-clean --repo=flatpak-repo flatpak-build packaging/flatpak/org.ember.Launcher.json
+flatpak build-bundle --runtime-repo=https://dl.flathub.org/repo/flathub.flatpakrepo flatpak-repo Ember-linux-x86_64.flatpak org.ember.Launcher
+```
 
 ## Build and run
 

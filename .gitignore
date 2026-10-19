@@ -7,6 +7,9 @@ zig-out/
 # Downloaded toolchains and release output
 /.deps/
 /dist/
+/.flatpak-builder/
+/flatpak-build/
+/flatpak-repo/
 
 __pycache__/
 *.pyc

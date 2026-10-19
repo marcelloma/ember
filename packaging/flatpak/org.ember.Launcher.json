@@ -1,0 +1,137 @@
+{
+  "app-id": "org.ember.Launcher",
+  "runtime": "org.freedesktop.Platform",
+  "runtime-version": "25.08",
+  "sdk": "org.freedesktop.Sdk",
+  "command": "ember",
+  "finish-args": [
+    "--share=ipc",
+    "--socket=wayland",
+    "--socket=fallback-x11",
+    "--socket=pulseaudio",
+    "--device=dri",
+    "--device=all"
+  ],
+  "cleanup": [
+    "/include",
+    "/lib/pkgconfig",
+    "/lib/cmake",
+    "/share/aclocal",
+    "/share/man",
+    "*.a",
+    "*.la"
+  ],
+  "modules": [
+    {
+      "name": "SDL",
+      "buildsystem": "cmake-ninja",
+      "config-opts": [
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DCMAKE_INSTALL_LIBDIR=lib",
+        "-DBUILD_SHARED_LIBS=ON",
+        "-DSDL_TESTS=OFF",
+        "-DSDL_STATIC=OFF"
+      ],
+      "post-install": [
+        "install -Dm644 LICENSE.txt /app/share/licenses/SDL/LICENSE.txt"
+      ],
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://codeload.github.com/libsdl-org/SDL/tar.gz/refs/tags/release-3.4.18",
+          "sha256": "c4b08b950bd29d83caae0ab8d884298d27046a9d30700fb42841c50992665c90"
+        }
+      ]
+    },
+    {
+      "name": "SDL_ttf",
+      "buildsystem": "cmake-ninja",
+      "config-opts": [
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DCMAKE_INSTALL_LIBDIR=lib",
+        "-DBUILD_SHARED_LIBS=ON",
+        "-DSDLTTF_SAMPLES=OFF",
+        "-DSDLTTF_VENDORED=OFF",
+        "-DSDLTTF_PLUTOSVG=OFF"
+      ],
+      "post-install": [
+        "install -Dm644 LICENSE.txt /app/share/licenses/SDL_ttf/LICENSE.txt"
+      ],
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://codeload.github.com/libsdl-org/SDL_ttf/tar.gz/refs/tags/release-3.2.2",
+          "sha256": "ff6b81d3dc39d843cc3ead6dedd68043a79513d266792ea89445547ef4e9b073"
+        }
+      ]
+    },
+    {
+      "name": "SDL_image",
+      "buildsystem": "cmake-ninja",
+      "config-opts": [
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DCMAKE_INSTALL_LIBDIR=lib",
+        "-DBUILD_SHARED_LIBS=ON",
+        "-DSDLIMAGE_SAMPLES=OFF",
+        "-DSDLIMAGE_TESTS=OFF",
+        "-DSDLIMAGE_VENDORED=OFF",
+        "-DSDLIMAGE_AVIF=OFF",
+        "-DSDLIMAGE_TIF=OFF",
+        "-DSDLIMAGE_WEBP=OFF"
+      ],
+      "post-install": [
+        "install -Dm644 LICENSE.txt /app/share/licenses/SDL_image/LICENSE.txt"
+      ],
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://codeload.github.com/libsdl-org/SDL_image/tar.gz/refs/tags/release-3.4.8",
+          "sha256": "a3cdbe4bee5dc6251bea15c379bde2bc87bc1eb78a6d68784852f51732d41c24"
+        }
+      ]
+    },
+    {
+      "name": "ember",
+      "buildsystem": "simple",
+      "build-options": {
+        "env": {
+          "PATH": "/run/build/ember/zig:/app/bin:/usr/bin",
+          "ZIG_GLOBAL_CACHE_DIR": "/run/build/ember/zig-cache"
+        }
+      },
+      "build-commands": [
+        "zig build -Doptimize=ReleaseSafe --prefix /app/lib/ember-install",
+        "SDL_VIDEODRIVER=dummy SDL_AUDIODRIVER=dummy zig build test -Doptimize=ReleaseSafe",
+        "mv /app/lib/ember-install/bin /app/lib/ember",
+        "rmdir /app/lib/ember-install",
+        "install -Dm755 packaging/flatpak/ember /app/bin/ember",
+        "install -Dm644 packaging/flatpak/org.ember.Launcher.desktop /app/share/applications/org.ember.Launcher.desktop",
+        "install -Dm644 packaging/flatpak/org.ember.Launcher.metainfo.xml /app/share/metainfo/org.ember.Launcher.metainfo.xml",
+        "install -Dm644 assets/brand/icon.svg /app/share/icons/hicolor/scalable/apps/org.ember.Launcher.svg"
+      ],
+      "sources": [
+        {
+          "type": "dir",
+          "path": "../..",
+          "skip": [
+            ".git",
+            ".deps",
+            "dist",
+            "roms",
+            "zig-out",
+            ".zig-cache",
+            ".flatpak-builder",
+            "flatpak-build",
+            "flatpak-repo"
+          ]
+        },
+        {
+          "type": "archive",
+          "url": "https://ziglang.org/download/0.16.0/zig-x86_64-linux-0.16.0.tar.xz",
+          "sha256": "70e49664a74374b48b51e6f3fdfbf437f6395d42509050588bd49abe52ba3d00",
+          "dest": "zig"
+        }
+      ]
+    }
+  ]
+}

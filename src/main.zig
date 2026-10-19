@@ -118,8 +118,12 @@ fn launchGame(allocator: std.mem.Allocator, base: [*:0]const u8, game: Game) !*s
     defer allocator.free(core);
     var info: s.SDL_PathInfo = undefined;
     if (!s.SDL_GetPathInfo(core, &info)) return error.CoreMissing;
-    var rom = try std.fmt.allocPrintSentinel(allocator, "{s}{s}", .{ std.mem.span(base), game.rom_path }, 0);
-    if (!s.SDL_GetPathInfo(rom, &info)) {
+    const rom_dir = s.SDL_getenv("EMBER_ROM_DIR");
+    var rom = if (rom_dir) |directory|
+        try std.fmt.allocPrintSentinel(allocator, "{s}/{s}", .{ std.mem.span(directory), game.rom_path["roms/".len..] }, 0)
+    else
+        try std.fmt.allocPrintSentinel(allocator, "{s}{s}", .{ std.mem.span(base), game.rom_path }, 0);
+    if (rom_dir == null and !s.SDL_GetPathInfo(rom, &info)) {
         allocator.free(rom);
         rom = try std.fmt.allocPrintSentinel(allocator, "{s}../../{s}", .{ std.mem.span(base), game.rom_path }, 0);
     }

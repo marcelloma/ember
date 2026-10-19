@@ -18,7 +18,7 @@ jobs:
   build:
     name: Build ${{ matrix.target }}
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
@@ -28,47 +28,41 @@ jobs:
         with:
           persist-credentials: false
       - name: Install Zig 0.16.0
+        if: matrix.target == 'windows-x86_64'
         shell: bash
         run: |
           curl --fail --location --retry 3 https://ziglang.org/download/0.16.0/zig-x86_64-linux-0.16.0.tar.xz -o "$RUNNER_TEMP/zig.tar.xz"
           echo "70e49664a74374b48b51e6f3fdfbf437f6395d42509050588bd49abe52ba3d00  $RUNNER_TEMP/zig.tar.xz" | sha256sum --check
           tar -xf "$RUNNER_TEMP/zig.tar.xz" -C "$RUNNER_TEMP"
           echo "$RUNNER_TEMP/zig-x86_64-linux-0.16.0" >> "$GITHUB_PATH"
-      - name: Install Linux build dependencies
+      - name: Build Linux Flatpak
         if: matrix.target == 'linux-x86_64'
         run: |
           sudo apt-get update
-          sudo apt-get install -y ninja-build cmake pkg-config patchelf libfreetype-dev libharfbuzz-dev libpng-dev libx11-dev libxext-dev libxrandr-dev libxcursor-dev libxi-dev libxfixes-dev libxss-dev libxtst-dev libwayland-dev libxkbcommon-dev libegl1-mesa-dev libgl1-mesa-dev libasound2-dev libpulse-dev libudev-dev
-          bash .github/scripts/build-linux-deps.sh
+          sudo apt-get install -y flatpak flatpak-builder
+          flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+          flatpak-builder --user --install-deps-from=flathub --assumeyes --force-clean --repo=flatpak-repo flatpak-build packaging/flatpak/org.ember.Launcher.json
+          mkdir -p dist/packages
+          flatpak build-bundle --runtime-repo=https://dl.flathub.org/repo/flathub.flatpakrepo flatpak-repo dist/packages/Ember-linux-x86_64.flatpak org.ember.Launcher
+      - name: Smoke test installed Flatpak
+        if: matrix.target == 'linux-x86_64'
+        run: |
+          flatpak install --user --assumeyes dist/packages/Ember-linux-x86_64.flatpak
+          flatpak run --user --command=sh --env=SDL_VIDEODRIVER=dummy --env=SDL_AUDIODRIVER=dummy org.ember.Launcher -c 'export ORBIT_SCREENSHOT="$XDG_CACHE_HOME/library.bmp"; ember && test -s "$ORBIT_SCREENSHOT" && test -d "$XDG_DATA_HOME/Ember/roms/snes"'
       - name: Fetch Windows dependencies
         if: matrix.target == 'windows-x86_64'
         run: python3 tools/fetch_windows_deps.py
-      - name: Build Linux and run unit tests
-        if: matrix.target == 'linux-x86_64'
-        run: |
-          zig build -Dtarget=x86_64-linux-gnu -Doptimize=ReleaseSafe --prefix dist/linux-x86_64
-          SDL_VIDEODRIVER=dummy SDL_AUDIODRIVER=dummy zig build test -Doptimize=ReleaseSafe
-      - name: Bundle Linux SDL libraries and smoke test
-        if: matrix.target == 'linux-x86_64'
-        run: |
-          folder=dist/linux-x86_64/bin
-          mkdir -p "$folder/lib" "$folder/licenses"
-          cp -a "$RUNNER_TEMP/ember-sdl/lib/"libSDL3*.so* "$folder/lib/"
-          cp -R "$RUNNER_TEMP/ember-sdl/licenses/"* "$folder/licenses/"
-          patchelf --set-rpath '$ORIGIN/lib' "$folder/ember"
-          find "$folder/lib" -type f -exec patchelf --set-rpath '$ORIGIN' {} \;
-          env -u LD_LIBRARY_PATH ldd "$folder/ember" | tee "$RUNNER_TEMP/ember-ldd.txt"
-          ! grep -q 'not found' "$RUNNER_TEMP/ember-ldd.txt"
-          env -u LD_LIBRARY_PATH SDL_VIDEODRIVER=dummy SDL_AUDIODRIVER=dummy ORBIT_SCREENSHOT="$RUNNER_TEMP/library.bmp" "$folder/ember"
-          test -s "$RUNNER_TEMP/library.bmp"
       - name: Build and check Windows
         if: matrix.target == 'windows-x86_64'
         run: |
           zig build -Dtarget=x86_64-windows-gnu -Doptimize=ReleaseSafe --prefix dist/windows-x86_64
           python3 tools/check_windows_package.py
-      - name: Package without ROMs
+      - name: Package Windows without ROMs
+        if: matrix.target == 'windows-x86_64'
         run: |
           python3 tools/package_release.py "${{ matrix.target }}"
+      - name: Calculate archive checksum
+        run: |
           cd dist/packages
           sha256sum Ember-* > "${{ matrix.target }}.sha256"
       - uses: actions/upload-artifact@v7
@@ -106,9 +100,11 @@ jobs:
           cat > "$RUNNER_TEMP/release-notes.md" <<EOF
           Automated build of main at $BUILD_SHA.
 
-          Download and extract the complete archive for your platform. ROMs are not included.
-          Linux: x86_64, Ubuntu 24.04 / glibc 2.39 or newer; SDL libraries are bundled,
-          with system FreeType, HarfBuzz, PNG, audio and desktop libraries required.
+          ROMs are not included.
+          Linux: install Ember-linux-x86_64.flatpak with flatpak install --user ./Ember-linux-x86_64.flatpak
+          Then launch with flatpak run org.ember.Launcher. The Freedesktop runtime is installed automatically.
+          Place SNES ROMs in ~/.var/app/org.ember.Launcher/data/Ember/roms/snes/
+          Windows: download and extract the entire zip archive.
           Windows: x86_64, SDL DLLs included; cross-compiled and statically checked.
           Windows runtime testing is still required.
 
@@ -116,6 +112,9 @@ jobs:
           EOF
           if gh release view latest > /dev/null 2>&1; then
             gh release upload latest packages/* --clobber
+            if gh release view latest --json assets --jq ' .assets[].name' | grep -Fxq Ember-0.1.0-linux-x86_64.tar.gz; then
+              gh release delete-asset latest Ember-0.1.0-linux-x86_64.tar.gz --yes
+            fi
             gh release edit latest --title "Latest main build" --notes-file "$RUNNER_TEMP/release-notes.md" --latest
           else
             gh release create latest packages/* --verify-tag --title "Latest main build" --notes-file "$RUNNER_TEMP/release-notes.md" --latest

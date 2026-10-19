@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Ember
+Comment=Your games, together
+Exec=ember
+Icon=org.ember.Launcher
+Terminal=false
+Categories=Game;
+StartupWMClass=org.ember.Launcher
+StartupNotify=true

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>org.ember.Launcher</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <name>Ember</name>
+  <summary>Your games, together</summary>
+  <description><p>A native game library with integrated SNES emulation, controller input, and automatic session saves. Game files must be supplied separately.</p></description>
+  <launchable type="desktop-id">org.ember.Launcher.desktop</launchable>
+  <url type="homepage">https://github.com/marcelloma/ember</url>
+  <provides><binary>ember</binary></provides>
+</component>
