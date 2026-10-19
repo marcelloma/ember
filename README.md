@@ -2,6 +2,21 @@
 
 A native Zig + SDL3 game launcher prototype for Linux and Windows.
 
+## Automated builds
+
+GitHub Actions builds every push to `main` and updates the rolling
+[latest release](https://github.com/marcelloma/ember/releases/tag/latest) after
+both Linux and Windows packages pass. Pull requests run the same build checks
+without publishing. The workflow also supports manual runs on `main`.
+
+Release downloads include a Linux tar.gz, Windows zip, and archive SHA-256
+checksums. ROMs are excluded. Linux CI builds on Ubuntu 24.04 (glibc 2.39),
+bundles the three SDL shared libraries, and uses system FreeType, HarfBuzz,
+PNG, audio and desktop libraries. Windows bundles its SDL DLLs and core.
+The Linux job runs unit tests and a headless library render; Windows binaries
+receive PE/resource/DLL checks and still need runtime testing on Windows.
+ROM-dependent integration tests remain local.
+
 ## Build and run
 
 Requires **Zig 0.16.0**, **SDL3**, **SDL3_ttf**, and **SDL3_image** development

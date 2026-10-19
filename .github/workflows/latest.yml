@@ -1,0 +1,122 @@
+name: Build and publish latest
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: latest-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build ${{ matrix.target }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [linux-x86_64, windows-x86_64]
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Install Zig 0.16.0
+        shell: bash
+        run: |
+          curl --fail --location --retry 3 https://ziglang.org/download/0.16.0/zig-x86_64-linux-0.16.0.tar.xz -o "$RUNNER_TEMP/zig.tar.xz"
+          echo "70e49664a74374b48b51e6f3fdfbf437f6395d42509050588bd49abe52ba3d00  $RUNNER_TEMP/zig.tar.xz" | sha256sum --check
+          tar -xf "$RUNNER_TEMP/zig.tar.xz" -C "$RUNNER_TEMP"
+          echo "$RUNNER_TEMP/zig-x86_64-linux-0.16.0" >> "$GITHUB_PATH"
+      - name: Install Linux build dependencies
+        if: matrix.target == 'linux-x86_64'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ninja-build cmake pkg-config patchelf libfreetype-dev libharfbuzz-dev libpng-dev libx11-dev libxext-dev libxrandr-dev libxcursor-dev libxi-dev libxfixes-dev libxss-dev libxtst-dev libwayland-dev libxkbcommon-dev libegl1-mesa-dev libgl1-mesa-dev libasound2-dev libpulse-dev libudev-dev
+          bash .github/scripts/build-linux-deps.sh
+      - name: Fetch Windows dependencies
+        if: matrix.target == 'windows-x86_64'
+        run: python3 tools/fetch_windows_deps.py
+      - name: Build Linux and run unit tests
+        if: matrix.target == 'linux-x86_64'
+        run: |
+          zig build -Dtarget=x86_64-linux-gnu -Doptimize=ReleaseSafe --prefix dist/linux-x86_64
+          SDL_VIDEODRIVER=dummy SDL_AUDIODRIVER=dummy zig build test -Doptimize=ReleaseSafe
+      - name: Bundle Linux SDL libraries and smoke test
+        if: matrix.target == 'linux-x86_64'
+        run: |
+          folder=dist/linux-x86_64/bin
+          mkdir -p "$folder/lib" "$folder/licenses"
+          cp -a "$RUNNER_TEMP/ember-sdl/lib/"libSDL3*.so* "$folder/lib/"
+          cp -R "$RUNNER_TEMP/ember-sdl/licenses/"* "$folder/licenses/"
+          patchelf --set-rpath '$ORIGIN/lib' "$folder/ember"
+          find "$folder/lib" -type f -exec patchelf --set-rpath '$ORIGIN' {} \;
+          env -u LD_LIBRARY_PATH ldd "$folder/ember" | tee "$RUNNER_TEMP/ember-ldd.txt"
+          ! grep -q 'not found' "$RUNNER_TEMP/ember-ldd.txt"
+          env -u LD_LIBRARY_PATH SDL_VIDEODRIVER=dummy SDL_AUDIODRIVER=dummy ORBIT_SCREENSHOT="$RUNNER_TEMP/library.bmp" "$folder/ember"
+          test -s "$RUNNER_TEMP/library.bmp"
+      - name: Build and check Windows
+        if: matrix.target == 'windows-x86_64'
+        run: |
+          zig build -Dtarget=x86_64-windows-gnu -Doptimize=ReleaseSafe --prefix dist/windows-x86_64
+          python3 tools/check_windows_package.py
+      - name: Package without ROMs
+        run: |
+          python3 tools/package_release.py "${{ matrix.target }}"
+          cd dist/packages
+          sha256sum Ember-* > "${{ matrix.target }}.sha256"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: ${{ matrix.target }}
+          path: dist/packages/*
+          if-no-files-found: error
+
+  release:
+    name: Update latest release
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          path: packages
+          merge-multiple: true
+      - name: Publish rolling release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          BUILD_SHA: ${{ github.sha }}
+        shell: bash
+        run: |
+          # Update the rolling tag only after both packages have passed their checks.
+          if gh api "repos/$GH_REPO/git/ref/tags/latest" > /dev/null 2>&1; then
+            gh api --method PATCH "repos/$GH_REPO/git/refs/tags/latest" -f sha="$BUILD_SHA" -F force=true
+          else
+            gh api --method POST "repos/$GH_REPO/git/refs" -f ref=refs/tags/latest -f sha="$BUILD_SHA"
+          fi
+          cat > "$RUNNER_TEMP/release-notes.md" <<EOF
+          Automated build of main at $BUILD_SHA.
+
+          Download and extract the complete archive for your platform. ROMs are not included.
+          Linux: x86_64, Ubuntu 24.04 / glibc 2.39 or newer; SDL libraries are bundled,
+          with system FreeType, HarfBuzz, PNG, audio and desktop libraries required.
+          Windows: x86_64, SDL DLLs included; cross-compiled and statically checked.
+          Windows runtime testing is still required.
+
+          Build: https://github.com/$GH_REPO/actions/runs/${{ github.run_id }}
+          EOF
+          if gh release view latest > /dev/null 2>&1; then
+            gh release upload latest packages/* --clobber
+            gh release edit latest --title "Latest main build" --notes-file "$RUNNER_TEMP/release-notes.md" --latest
+          else
+            gh release create latest packages/* --verify-tag --title "Latest main build" --notes-file "$RUNNER_TEMP/release-notes.md" --latest
+          fi

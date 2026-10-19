@@ -18,7 +18,9 @@ readme='''Ember 0.1.0
 
 Extract the entire folder before launching. Open ember.exe on Windows, or
 ./ember on Linux. Keep assets/, cores/, and the Windows DLLs beside the program.
-Linux requires SDL3, SDL3_ttf, and SDL3_image runtime libraries.
+CI Linux packages include SDL3, SDL3_ttf, and SDL3_image in lib/ and require
+Ubuntu 24.04 / glibc 2.39 or newer, with system FreeType, HarfBuzz, PNG, audio
+and desktop libraries. Local Linux builds require the installed SDL runtimes.
 
 Click Play or double-click a cover to launch a game. Escape opens the pause menu.
 Choose Save & return to library to exit; launching again restores your session.
