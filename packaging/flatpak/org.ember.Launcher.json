@@ -5,6 +5,7 @@
   "sdk": "org.freedesktop.Sdk",
   "command": "ember",
   "finish-args": [
+    "--filesystem=~/Ember:create",
     "--share=ipc",
     "--socket=wayland",
     "--socket=fallback-x11",

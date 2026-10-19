@@ -48,7 +48,7 @@ jobs:
         if: matrix.target == 'linux-x86_64'
         run: |
           flatpak install --user --assumeyes dist/packages/Ember-linux-x86_64.flatpak
-          flatpak run --user --command=sh --env=SDL_VIDEODRIVER=dummy --env=SDL_AUDIODRIVER=dummy org.ember.Launcher -c 'export ORBIT_SCREENSHOT="$XDG_CACHE_HOME/library.bmp"; ember && test -s "$ORBIT_SCREENSHOT" && test -d "$XDG_DATA_HOME/Ember/roms/snes"'
+          flatpak run --user --command=sh --env=SDL_VIDEODRIVER=dummy --env=SDL_AUDIODRIVER=dummy org.ember.Launcher -c 'export EMBER_SETUP_CHECK="$XDG_DATA_HOME/test-library" ORBIT_SCREENSHOT="$XDG_CACHE_HOME/library.bmp"; ember && test -s "$ORBIT_SCREENSHOT" && test -d "$EMBER_SETUP_CHECK/roms/snes" && test -d "$EMBER_SETUP_CHECK/settings/snes" && unset EMBER_SETUP_CHECK && ember'
       - name: Fetch Windows dependencies
         if: matrix.target == 'windows-x86_64'
         run: python3 tools/fetch_windows_deps.py
@@ -103,7 +103,7 @@ jobs:
           ROMs are not included.
           Linux: install Ember-linux-x86_64.flatpak with flatpak install --user ./Ember-linux-x86_64.flatpak
           Then launch with flatpak run org.ember.Launcher. The Freedesktop runtime is installed automatically.
-          Place SNES ROMs in ~/.var/app/org.ember.Launcher/data/Ember/roms/snes/
+          First launch asks for an Ember directory (default ~/Ember). Put SNES ROMs in its roms/snes/ folder.
           Windows: download and extract the entire zip archive.
           Windows: x86_64, SDL DLLs included; cross-compiled and statically checked.
           Windows runtime testing is still required.

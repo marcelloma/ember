@@ -27,15 +27,26 @@ flatpak run org.ember.Launcher
 ```
 
 Flatpak installs the required Freedesktop runtime from Flathub. The app appears
-in the desktop application menu with the flame icon. Copy your SNES files into
-`~/.var/app/org.ember.Launcher/data/Ember/roms/snes/`, using the filenames in
-`library/snes.json`. The app creates this folder on first launch. Saves and
-settings also stay in its private Flatpak data directory; existing non-Flatpak
-saves are not migrated automatically. No host home-directory or network access
-is granted. For an external ROM directory, grant that specific folder with
-`flatpak override --user --filesystem=/absolute/path:ro --env=EMBER_ROM_DIR=/absolute/path org.ember.Launcher`.
-The selected folder must contain `snes/`. This override also works for native
-builds via the `EMBER_ROM_DIR` environment variable.
+in the desktop application menu with the flame icon. On first launch, Ember asks
+where to initialize its directory, defaulting to `~/Ember` (the user's home
+folder on Windows too). Use the default or browse to another folder. The folder
+must be writable; initialization keeps existing files and creates:
+
+- `roms/snes/` for game files, using the filenames in `library/snes.json`.
+- `saves/snes/` for battery saves and `states/snes/` for resume states.
+- `settings/snes/` for game settings, `system/` for core system files, and
+  `configs/` for additional configuration.
+
+A small location pointer in SDL's Ember application-preferences directory
+remembers the selection; the actual game data lives in the chosen folder.
+Flatpak permits the default `~/Ember` folder and uses the desktop folder picker
+for other locations. No general home-directory or network access is granted.
+If the remembered folder is inaccessible or unwritable, setup appears again.
+Existing Orbit and earlier Flatpak data are kept in place, without automatic
+migration; copy their `saves/`, `states/`, and `settings/` into the chosen Ember
+folder if needed. Explicit `ORBIT_DATA_DIR` overrides bypass setup for existing
+developer and test workflows; `EMBER_SKIP_SETUP=1` also bypasses it. An
+`EMBER_ROM_DIR` override continues to select a ROM folder containing `snes/`.
 
 To build the Flatpak locally with `flatpak-builder` installed:
 

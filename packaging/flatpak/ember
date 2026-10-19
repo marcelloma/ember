@@ -1,4 +1,2 @@
 #!/bin/sh
-export EMBER_ROM_DIR="${EMBER_ROM_DIR:-$XDG_DATA_HOME/Ember/roms}"
-mkdir -p "$EMBER_ROM_DIR/snes"
 exec /app/lib/ember/ember "$@"

@@ -110,6 +110,115 @@ const Layout = struct {
         return null;
     }
 };
+fn initializeStorage(allocator: std.mem.Allocator, window: *s.SDL_Window) !bool {
+    // Explicit overrides keep headless tools and developer workflows non-interactive.
+    if (s.SDL_getenv("EMBER_SKIP_SETUP") != null or s.SDL_getenv("ORBIT_DATA_DIR") != null) return true;
+    const storage = @import("storage.zig");
+    const remembered = storage.load(allocator) catch null;
+    var selected_path = remembered orelse blk: {
+        const home = s.SDL_GetUserFolder(s.SDL_FOLDER_HOME) orelse return error.StorageHome;
+        break :blk try std.fmt.allocPrintSentinel(allocator, "{s}{s}Ember", .{ std.mem.span(home), if (std.mem.endsWith(u8, std.mem.span(home), "/") or std.mem.endsWith(u8, std.mem.span(home), "\\")) "" else "/" }, 0);
+    };
+    if (remembered != null) {
+        if (storage.initialize(allocator, selected_path)) |_| {
+            try storage.activate(allocator, selected_path);
+            return true;
+        } else |_| {}
+    }
+    var focus: usize = 1;
+    var pending = false;
+    var quit = false;
+    var picker = storage.Selection{};
+    const setup_check = s.SDL_getenv("EMBER_SETUP_CHECK");
+    if (setup_check) |directory| selected_path = try allocator.dupeZ(u8, std.mem.span(directory));
+    var check_queued = false;
+    var message: [:0]const u8 = "ROMs, saves, settings and system files will live here.";
+    defer {
+        for (labels[0..label_count]) |label| s.SDL_DestroyTexture(label.texture);
+        label_count = 0;
+    }
+    while (true) {
+        if (pending and picker.ready.load(.acquire)) {
+            pending = false;
+            if (picker.path) |chosen| {
+                selected_path = try allocator.dupeZ(u8, std.mem.span(chosen));
+                s.SDL_free(chosen);
+                picker.path = null;
+            }
+            if (picker.failed) message = "The folder picker could not open. Try again or use the default.";
+        }
+        if (quit and !pending) return false;
+        _ = s.SDL_SetRenderLogicalPresentation(renderer, 1000, 650, s.SDL_LOGICAL_PRESENTATION_LETTERBOX);
+        var action: ?usize = null;
+        var event: s.SDL_Event = undefined;
+        while (s.SDL_PollEvent(&event)) {
+            _ = s.SDL_ConvertEventToRenderCoordinates(renderer, &event);
+            if (event.type == s.SDL_EVENT_QUIT) quit = true;
+            if (pending) continue;
+            if (event.type == s.SDL_EVENT_KEY_DOWN) {
+                switch (event.key.key) {
+                    s.SDLK_ESCAPE => quit = true,
+                    s.SDLK_TAB, s.SDLK_LEFT, s.SDLK_RIGHT => focus = 1 - focus,
+                    s.SDLK_RETURN, s.SDLK_SPACE => action = focus,
+                    else => {},
+                }
+            }
+            if (event.type == s.SDL_EVENT_MOUSE_BUTTON_DOWN and event.button.button == s.SDL_BUTTON_LEFT) {
+                if (hit(event.button.x, event.button.y, 100, 410, 270, 60)) action = 0;
+                if (hit(event.button.x, event.button.y, 390, 410, 300, 60)) action = 1;
+            }
+        }
+        if (action) |choice| {
+            focus = choice;
+            if (choice == 0) {
+                picker = .{};
+                pending = true;
+                s.SDL_ShowOpenFolderDialog(storage.Selection.callback, &picker, window, selected_path, false);
+            } else {
+                if (storage.initialize(allocator, selected_path)) |_| {
+                    if (storage.remember(allocator, selected_path)) |_| {
+                        try storage.activate(allocator, selected_path);
+                        return true;
+                    } else |_| {
+                        message = "Could not remember this location. Check your app configuration access.";
+                    }
+                } else |_| {
+                    message = "Cannot write to this folder. Choose an accessible location.";
+                }
+            }
+        }
+        _ = s.SDL_SetRenderDrawColor(renderer, 20, 21, 23, 255);
+        _ = s.SDL_RenderClear(renderer);
+        text(100, 100, 0, "WELCOME TO EMBER", accent);
+        text(100, 145, 4, "A home for your games", white);
+        text(100, 220, 1, "Choose where to initialize your Ember directory.", muted);
+        rect(100, 280, 800, 72, .{ 39, 40, 43 });
+        const clip = s.SDL_Rect{ .x = 115, .y = 280, .w = 770, .h = 72 };
+        _ = s.SDL_SetRenderClipRect(renderer, &clip);
+        text(120, 302, 1, selected_path, white);
+        _ = s.SDL_SetRenderClipRect(renderer, null);
+        text(100, 370, 0, message, muted);
+        rect(100, 410, 270, 60, if (focus == 0) accent else .{ 50, 51, 54 });
+        text(125, 427, 1, if (pending) "Choosing folder..." else "Choose another folder", if (focus == 0) .{ 20, 20, 20 } else white);
+        rect(390, 410, 300, 60, if (focus == 1) accent else .{ 50, 51, 54 });
+        text(420, 427, 1, "Initialize Ember", if (focus == 1) .{ 20, 20, 20 } else white);
+        text(100, 520, 0, "Existing files are kept. Game files are supplied separately.", muted);
+        if (setup_check != null and !check_queued) {
+            if (s.SDL_getenv("EMBER_SETUP_SCREENSHOT")) |output| {
+                const surface = s.SDL_RenderReadPixels(renderer, null) orelse return error.ScreenshotRead;
+                defer s.SDL_DestroySurface(surface);
+                if (!s.SDL_SaveBMP(surface, output)) return error.ScreenshotSave;
+            }
+            var enter: s.SDL_Event = std.mem.zeroes(s.SDL_Event);
+            enter.type = s.SDL_EVENT_KEY_DOWN;
+            enter.key.key = s.SDLK_RETURN;
+            if (!s.SDL_PushEvent(&enter)) return error.SetupCheckEvent;
+            check_queued = true;
+        }
+        _ = s.SDL_RenderPresent(renderer);
+        s.SDL_Delay(16);
+    }
+}
 fn launchGame(allocator: std.mem.Allocator, base: [*:0]const u8, game: Game) !*s.SDL_Process {
     const windows = @import("builtin").os.tag == .windows;
     const executable = try std.fmt.allocPrintSentinel(allocator, "{s}ember{s}", .{ std.mem.span(base), if (windows) ".exe" else "" }, 0);
@@ -194,6 +303,7 @@ pub fn main(init: std.process.Init) !void {
     }
     defer for (fonts) |font| s.TTF_CloseFont(font);
     defer for (labels[0..label_count]) |label| s.SDL_DestroyTexture(label.texture);
+    if (!try initializeStorage(init.arena.allocator(), window)) return;
     var covers: [games.len]*s.SDL_Texture = undefined;
     var loaded: usize = 0;
     defer for (covers[0..loaded]) |texture| s.SDL_DestroyTexture(texture);
