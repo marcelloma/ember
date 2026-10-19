@@ -1,0 +1,7 @@
+{
+  "core": "Snes9x",
+  "url": "https://buildbot.libretro.com/nightly/linux/x86_64/latest/snes9x_libretro.so.zip",
+  "sha256": "9b2b6ea9d88f96c156590443ddd05ee56aaf4e495329a889c979921942717a31",
+  "downloaded": "2026-10-18",
+  "platform": "linux-x86_64"
+}

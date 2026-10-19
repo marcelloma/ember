@@ -1,0 +1,102 @@
+[
+  {
+    "title": "Chrono Trigger",
+    "system": "snes",
+    "rom_path": "roms/snes/Chrono Trigger (USA).sfc",
+    "source_archive": "Chrono Trigger (USA).zip",
+    "archive_member": "Chrono Trigger (USA).sfc",
+    "bytes": 4194304,
+    "sha256": "06d1c2b06b716052c5596aaa0c2e5632a027fee1a9a28439e509f813c30829a9",
+    "cover_path": "assets/covers/snes/chrono-trigger.png"
+  },
+  {
+    "title": "Super Metroid",
+    "system": "snes",
+    "rom_path": "roms/snes/Super Metroid (Japan, USA) (En,Ja).sfc",
+    "source_archive": "Super Metroid (Japan, USA) (En,Ja).zip",
+    "archive_member": "Super Metroid (Japan, USA) (En,Ja).sfc",
+    "bytes": 3145728,
+    "sha256": "12b77c4bc9c1832cee8881244659065ee1d84c70c3d29e6eaf92e6798cc2ca72",
+    "cover_path": "assets/covers/snes/super-metroid.png"
+  },
+  {
+    "title": "Super Mario World",
+    "system": "snes",
+    "rom_path": "roms/snes/Super Mario World (USA).sfc",
+    "source_archive": "Super Mario World (USA).zip",
+    "archive_member": "Super Mario World (USA).sfc",
+    "bytes": 524288,
+    "sha256": "0838e531fe22c077528febe14cb3ff7c492f1f5fa8de354192bdff7137c27f5b",
+    "cover_path": "assets/covers/snes/super-mario-world.png"
+  },
+  {
+    "title": "The Legend of Zelda: A Link to the Past",
+    "system": "snes",
+    "rom_path": "roms/snes/Legend of Zelda, The - A Link to the Past (USA).sfc",
+    "source_archive": "Legend of Zelda, The - A Link to the Past (USA).zip",
+    "archive_member": "Legend of Zelda, The - A Link to the Past (USA).sfc",
+    "bytes": 1048576,
+    "sha256": "66871d66be19ad2c34c927d6b14cd8eb6fc3181965b6e517cb361f7316009cfb",
+    "cover_path": "assets/covers/snes/a-link-to-the-past.png"
+  },
+  {
+    "title": "Final Fantasy VI",
+    "system": "snes",
+    "rom_path": "roms/snes/Final Fantasy III (USA).sfc",
+    "source_archive": "Final Fantasy III (USA).zip",
+    "archive_member": "Final Fantasy III (USA).sfc",
+    "bytes": 3145728,
+    "sha256": "0f51b4fca41b7fd509e4b8f9d543151f68efa5e97b08493e4b2a0c06f5d8d5e2",
+    "cover_path": "assets/covers/snes/final-fantasy-vi.png"
+  },
+  {
+    "title": "EarthBound",
+    "system": "snes",
+    "rom_path": "roms/snes/EarthBound (USA).sfc",
+    "source_archive": "EarthBound (USA).zip",
+    "archive_member": "EarthBound (USA).sfc",
+    "bytes": 3145728,
+    "sha256": "a8fe2226728002786d68c27ddddf0b90a894db52e4dfe268fdf72a68cae5f02e",
+    "cover_path": "assets/covers/snes/earthbound.png"
+  },
+  {
+    "title": "Donkey Kong Country 2: Diddy's Kong Quest",
+    "system": "snes",
+    "rom_path": "roms/snes/Donkey Kong Country 2 - Diddy's Kong Quest (USA) (En,Fr).sfc",
+    "source_archive": "Donkey Kong Country 2 - Diddy's Kong Quest (USA) (En,Fr).zip",
+    "archive_member": "Donkey Kong Country 2 - Diddy's Kong Quest (USA) (En,Fr).sfc",
+    "bytes": 4194304,
+    "sha256": "35421a9af9dd011b40b91f792192af9f99c93201d8d394026bdfb42cbf2d8633",
+    "cover_path": "assets/covers/snes/donkey-kong-country-2.png"
+  },
+  {
+    "title": "Mega Man X",
+    "system": "snes",
+    "rom_path": "roms/snes/Mega Man X (USA).sfc",
+    "source_archive": "Mega Man X (USA).zip",
+    "archive_member": "Mega Man X (USA).sfc",
+    "bytes": 1572864,
+    "sha256": "3e1209f473bff8cd4bcbf71d071e7f8df17a2d564e9a5c4c427ee8198cebb615",
+    "cover_path": "assets/covers/snes/mega-man-x.png"
+  },
+  {
+    "title": "Super Mario World 2: Yoshi's Island",
+    "system": "snes",
+    "rom_path": "roms/snes/Super Mario World 2 - Yoshi's Island (USA).sfc",
+    "source_archive": "Super Mario World 2 - Yoshi's Island (USA).zip",
+    "archive_member": "Super Mario World 2 - Yoshi's Island (USA).sfc",
+    "bytes": 2097152,
+    "sha256": "9b4957466798bbdb5b43a450bbb60b2591ae81d95b891430f62d53ca62e8bc7b",
+    "cover_path": "assets/covers/snes/yoshis-island.png"
+  },
+  {
+    "title": "Super Mario RPG: Legend of the Seven Stars",
+    "system": "snes",
+    "rom_path": "roms/snes/Super Mario RPG - Legend of the Seven Stars (USA).sfc",
+    "source_archive": "Super Mario RPG - Legend of the Seven Stars (USA).zip",
+    "archive_member": "Super Mario RPG - Legend of the Seven Stars (USA).sfc",
+    "bytes": 4194304,
+    "sha256": "740646f3535bfb365ca44e70d46ab433467b142bd84010393070bd0b141af853",
+    "cover_path": "assets/covers/snes/super-mario-rpg.png"
+  }
+]

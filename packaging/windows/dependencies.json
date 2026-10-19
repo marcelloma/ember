@@ -1,0 +1,44 @@
+[
+  {
+    "name": "SDL3-3.4.18-win32-x64.zip",
+    "url": "https://github.com/libsdl-org/SDL/releases/download/release-3.4.18/SDL3-3.4.18-win32-x64.zip",
+    "sha256": "75c2c0fc74e7d1206aaedc22893a35887332f4f85f5c8b74fddc10d177985f2c",
+    "component": "SDL"
+  },
+  {
+    "name": "SDL3-devel-3.4.18-mingw.zip",
+    "url": "https://github.com/libsdl-org/SDL/releases/download/release-3.4.18/SDL3-devel-3.4.18-mingw.zip",
+    "sha256": "cd98158c8d025a816f430a600b4e9526524e6219ee884ec72bd498b80fd3bf58",
+    "component": "SDL"
+  },
+  {
+    "name": "SDL3_ttf-3.2.2-win32-x64.zip",
+    "url": "https://github.com/libsdl-org/SDL_ttf/releases/download/release-3.2.2/SDL3_ttf-3.2.2-win32-x64.zip",
+    "sha256": "13455007029cf487c5aacaa6ff84406be78ffdbed08f933aba3668680ff245f8",
+    "component": "SDL_ttf"
+  },
+  {
+    "name": "SDL3_ttf-devel-3.2.2-mingw.zip",
+    "url": "https://github.com/libsdl-org/SDL_ttf/releases/download/release-3.2.2/SDL3_ttf-devel-3.2.2-mingw.zip",
+    "sha256": "e44e78d6dec080f1d96bd8ac1bac98ddc2574eff980d777c223c799c5a03b1ba",
+    "component": "SDL_ttf"
+  },
+  {
+    "name": "SDL3_image-3.4.8-win32-x64.zip",
+    "url": "https://github.com/libsdl-org/SDL_image/releases/download/release-3.4.8/SDL3_image-3.4.8-win32-x64.zip",
+    "sha256": "16cd6e16c0e88ad55d63fd27921811aea5c1e9d10a5607fa588f48bd4f03a754",
+    "component": "SDL_image"
+  },
+  {
+    "name": "SDL3_image-devel-3.4.8-mingw.zip",
+    "url": "https://github.com/libsdl-org/SDL_image/releases/download/release-3.4.8/SDL3_image-devel-3.4.8-mingw.zip",
+    "sha256": "4382af1726d718bcabe8d2ca0e29afe94adc477f6bbe1037850563a14fe9dea7",
+    "component": "SDL_image"
+  },
+  {
+    "name": "snes9x_libretro.dll.zip",
+    "url": "https://buildbot.libretro.com/nightly/windows/x86_64/latest/snes9x_libretro.dll.zip",
+    "sha256": "bb5f135e2a2071e69df4f3786a17fbf59a94bad8ade75caa4039c1e6c1222fad",
+    "component": "snes9x"
+  }
+]

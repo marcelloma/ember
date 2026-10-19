@@ -1,0 +1,52 @@
+[
+  {
+    "id": "ocarina",
+    "page": "https://en.wikipedia.org/wiki/The_Legend_of_Zelda:_Ocarina_of_Time",
+    "image": "https://thumb.wikimedia.org/wikipedia/en/thumb/5/57/The_Legend_of_Zelda_Ocarina_of_Time.jpg/250px-The_Legend_of_Zelda_Ocarina_of_Time.jpg?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail"
+  },
+  {
+    "id": "soulcalibur",
+    "page": "https://en.wikipedia.org/wiki/Soulcalibur_(video_game)",
+    "image": "https://raw.githubusercontent.com/libretro-thumbnails/Sega_-_Dreamcast/master/Named_Boxarts/Soulcalibur%20%28USA%29.png"
+  },
+  {
+    "id": "gta4",
+    "page": "https://en.wikipedia.org/wiki/Grand_Theft_Auto_IV",
+    "image": "https://thumb.wikimedia.org/wikipedia/en/thumb/b/b7/Grand_Theft_Auto_IV_cover.jpg/250px-Grand_Theft_Auto_IV_cover.jpg?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail"
+  },
+  {
+    "id": "galaxy",
+    "page": "https://en.wikipedia.org/wiki/Super_Mario_Galaxy",
+    "image": "https://thumb.wikimedia.org/wikipedia/en/thumb/7/76/SuperMarioGalaxy.jpg/250px-SuperMarioGalaxy.jpg?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail"
+  },
+  {
+    "id": "galaxy2",
+    "page": "https://en.wikipedia.org/wiki/Super_Mario_Galaxy_2",
+    "image": "https://upload.wikimedia.org/wikipedia/en/6/65/Super_Mario_Galaxy_2_Box_Art.jpg?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail_unscaled"
+  },
+  {
+    "id": "botw",
+    "page": "https://en.wikipedia.org/wiki/The_Legend_of_Zelda:_Breath_of_the_Wild",
+    "image": "https://thumb.wikimedia.org/wikipedia/en/thumb/c/c6/The_Legend_of_Zelda_Breath_of_the_Wild.jpg/250px-The_Legend_of_Zelda_Breath_of_the_Wild.jpg?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail"
+  },
+  {
+    "id": "thps3",
+    "page": "https://en.wikipedia.org/wiki/Tony_Hawk%27s_Pro_Skater_3",
+    "image": "https://thumb.wikimedia.org/wikipedia/en/thumb/2/2b/Tony_Hawk%27s_Pro_Skater_3_Coverart.jpg/250px-Tony_Hawk%27s_Pro_Skater_3_Coverart.jpg?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail"
+  },
+  {
+    "id": "perfectdark",
+    "page": "https://en.wikipedia.org/wiki/Perfect_Dark",
+    "image": "https://thumb.wikimedia.org/wikipedia/en/thumb/3/32/Perfect_dark_box.jpg/250px-Perfect_dark_box.jpg?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail"
+  },
+  {
+    "id": "rdr2",
+    "page": "https://en.wikipedia.org/wiki/Red_Dead_Redemption_2",
+    "image": "https://thumb.wikimedia.org/wikipedia/en/thumb/4/44/Red_Dead_Redemption_II.jpg/250px-Red_Dead_Redemption_II.jpg?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail"
+  },
+  {
+    "id": "gta5",
+    "page": "https://en.wikipedia.org/wiki/Grand_Theft_Auto_V",
+    "image": "https://thumb.wikimedia.org/wikipedia/en/thumb/a/a5/Grand_Theft_Auto_V.png/250px-Grand_Theft_Auto_V.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail"
+  }
+]

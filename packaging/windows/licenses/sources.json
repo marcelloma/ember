@@ -1,0 +1,22 @@
+[
+  {
+    "file": "FreeType-FTL.txt",
+    "url": "https://raw.githubusercontent.com/freetype/freetype/master/docs/FTL.TXT",
+    "sha256": "5a5ee54c5001bbad1cdc1a57cc3dd4c42199b2da09d39c7ee41fab002d02967f"
+  },
+  {
+    "file": "HarfBuzz-COPYING.txt",
+    "url": "https://raw.githubusercontent.com/harfbuzz/harfbuzz/main/COPYING",
+    "sha256": "ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64"
+  },
+  {
+    "file": "plutosvg-LICENSE.txt",
+    "url": "https://raw.githubusercontent.com/sammycage/plutosvg/master/LICENSE",
+    "sha256": "a55d1e78eaf75779c336b4ba061e74aae56a21195d234474fb24a398935d6ce1"
+  },
+  {
+    "file": "plutovg-LICENSE.txt",
+    "url": "https://raw.githubusercontent.com/sammycage/plutovg/master/LICENSE",
+    "sha256": "a55d1e78eaf75779c336b4ba061e74aae56a21195d234474fb24a398935d6ce1"
+  }
+]

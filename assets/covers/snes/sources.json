@@ -1,0 +1,102 @@
+[
+  {
+    "id": "chrono-trigger",
+    "file": "snes/chrono-trigger.png",
+    "page": "https://www.steamgriddb.com/grid/58196",
+    "image": "https://cdn2.steamgriddb.com/grid/abc617f05e41620356626cf7761d5143.png",
+    "author": "Malixx",
+    "width": 600,
+    "height": 900,
+    "sha256": "f30c7bb15cd9c883fb2d881009f60bf9d77492e530efe88ff6d717f1db12dd2b"
+  },
+  {
+    "id": "super-metroid",
+    "file": "snes/super-metroid.png",
+    "page": "https://www.steamgriddb.com/grid/133958",
+    "image": "https://cdn2.steamgriddb.com/grid/baaa5cd0f998f6365546816489650a93.png",
+    "author": "ABH20",
+    "width": 600,
+    "height": 900,
+    "sha256": "1b6d1dc337ba3034c3835aa0ab9da7d701d290d55341cb371ad27fa937bacda8"
+  },
+  {
+    "id": "super-mario-world",
+    "file": "snes/super-mario-world.png",
+    "page": "https://www.steamgriddb.com/grid/141541",
+    "image": "https://cdn2.steamgriddb.com/grid/2bf887cd37fa5ba4ce0ba9713013a4f7.png",
+    "author": "scoobymcsnack",
+    "width": 600,
+    "height": 900,
+    "sha256": "a642b22b28b756837e51aedcdfb95994a352a5da0cafa83d8b3acf55a6371185"
+  },
+  {
+    "id": "a-link-to-the-past",
+    "file": "snes/a-link-to-the-past.png",
+    "page": "https://www.steamgriddb.com/grid/112773",
+    "image": "https://cdn2.steamgriddb.com/grid/92eadcfdb6a214b044c116a8e2245947.png",
+    "author": "Longinus",
+    "width": 600,
+    "height": 900,
+    "sha256": "6bbe4c4cbb9d26b721168129cb7f9e86c9934908b45090af2cd69a6aca0ece54"
+  },
+  {
+    "id": "final-fantasy-vi",
+    "file": "snes/final-fantasy-vi.png",
+    "page": "https://www.steamgriddb.com/grid/37081",
+    "image": "https://cdn2.steamgriddb.com/grid/5bf83765a9b40e753efadf660e4dde44.png",
+    "author": "Hapag-Lloyd",
+    "width": 600,
+    "height": 900,
+    "sha256": "78e9744c72a348af960a83bf2a48d898cb938c155d4a25597921accedd9d6acd"
+  },
+  {
+    "id": "earthbound",
+    "file": "snes/earthbound.png",
+    "page": "https://www.steamgriddb.com/grid/100276",
+    "image": "https://cdn2.steamgriddb.com/grid/7e9a8e67197bad8ec246bde2c4cebfb9.png",
+    "author": "Onyx8011",
+    "width": 600,
+    "height": 900,
+    "sha256": "3e26dd70cd741f7d61a323a45b795d3e871e920c82cee9546df659baa7936ef0"
+  },
+  {
+    "id": "donkey-kong-country-2",
+    "file": "snes/donkey-kong-country-2.png",
+    "page": "https://www.steamgriddb.com/grid/132172",
+    "image": "https://cdn2.steamgriddb.com/grid/9eedaa0047c9b22b4d54535920cdd876.png",
+    "author": "adol cristo",
+    "width": 600,
+    "height": 900,
+    "sha256": "2080d71a53023903257370f3af01b50571c0c34d0af875153ed8943c4eaf6871"
+  },
+  {
+    "id": "mega-man-x",
+    "file": "snes/mega-man-x.png",
+    "page": "https://www.steamgriddb.com/grid/106143",
+    "image": "https://cdn2.steamgriddb.com/grid/e24927b595bdddebb71671d11f76f067.png",
+    "author": "carlsgrids",
+    "width": 600,
+    "height": 900,
+    "sha256": "76834c9b0fc57fcb003c3feb050b536b093c1d57eaca43fde2fb799a7cea528c"
+  },
+  {
+    "id": "yoshis-island",
+    "file": "snes/yoshis-island.png",
+    "page": "https://www.steamgriddb.com/grid/174119",
+    "image": "https://cdn2.steamgriddb.com/grid/59857cc70355243795b398b32447b862.png",
+    "author": "RuinousXana",
+    "width": 600,
+    "height": 900,
+    "sha256": "f31f0ff25688f53b650259b4f200a18590ecbb79c3f75136dee021686acd3645"
+  },
+  {
+    "id": "super-mario-rpg",
+    "file": "snes/super-mario-rpg.png",
+    "page": "https://www.steamgriddb.com/grid/167683",
+    "image": "https://cdn2.steamgriddb.com/grid/394ef49f1d019ccaf6caf070c403cb32.png",
+    "author": "Gussonic",
+    "width": 600,
+    "height": 900,
+    "sha256": "71c71d8acc242d568379e0e3a990507b000a1b470d3d5dc95b0e53b0b23cdd90"
+  }
+]

@@ -1,0 +1,12 @@
+.zig-cache/
+zig-out/
+
+# Local game content
+/roms/
+
+# Downloaded toolchains and release output
+/.deps/
+/dist/
+
+__pycache__/
+*.pyc

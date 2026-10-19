@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Ember
+Comment=Your games, together
+Exec="/home/marcello/Documents/ChatGPT/Games Launcher/zig-out/bin/ember"
+Icon=/home/marcello/Documents/ChatGPT/Games Launcher/assets/brand/icon.svg
+Terminal=false
+Categories=Game;
+StartupWMClass=org.ember.Launcher
+StartupNotify=true
